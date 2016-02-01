@@ -100,4 +100,33 @@
     if (number && textView.text.length > [number integerValue] && textView.markedTextRange == nil) {
         textView.text = [textView.text substringWithRange: NSMakeRange(0, [number integerValue])];
     }
-}@end
+}
+
+
+
+#pragma mark - UITextField Delegate
+//代理实现 只能输入数字
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    return [self validateNumber:string];
+    
+}
+
+- (BOOL)validateNumber:(NSString*)number {
+    BOOL res = YES;
+    NSCharacterSet* tmpSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    int i = 0;
+    while (i < number.length) {
+        NSString * string = [number substringWithRange:NSMakeRange(i, 1)];
+        NSRange range = [string rangeOfCharacterFromSet:tmpSet];
+        if (range.length == 0) {
+            res = NO;
+            break;
+        }
+        i++;
+    }
+    
+    return res;
+}
+
+
+@end
